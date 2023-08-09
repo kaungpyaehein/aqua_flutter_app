@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "659135811570",
+    "project_id": "aquaflutter",
+    "storage_bucket": "aquaflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659135811570:android:54825df079fb642644a56b",
+        "android_client_info": {
+          "package_name": "com.example.purifed_water_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659135811570-u00jdm5m1m2s39upefkg30ab4utoofcf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzhD_7pff6UOl07Q3xMOst2Fd8B7DifUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659135811570-u00jdm5m1m2s39upefkg30ab4utoofcf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
