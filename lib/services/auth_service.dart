@@ -1,8 +1,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService{
+class AuthService extends ChangeNotifier{
   //sign in with Google
 
   signInWithGoogle() async{
@@ -15,7 +16,6 @@ class AuthService{
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
-
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
