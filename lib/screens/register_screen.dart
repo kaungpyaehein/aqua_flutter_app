@@ -117,8 +117,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Consumer<CartModel>(
                     builder: (context, value, child) {
                       return DropdownButtonFormField<String>(
-                        value: value.selectedOption.isNotEmpty
-                            ? value.selectedOption
+                        value: value.floorProvider().isNotEmpty
+                            ? value.floorProvider()
                             : null,
                         onChanged: (newValue) {
                           setState(() {
@@ -174,6 +174,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: const EdgeInsets.all(8),
                   child: GestureDetector(
                     onTap: () {
+
                       if (nameController.text.isNotEmpty &&
                           phoneController.text.isNotEmpty &&
                           addressController.text.isNotEmpty) {
@@ -183,6 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           addressController.text.trim(),
                           value.selectedOption,
                         );
+                        value.updateFloorPrice(value.selectedOption);
                         Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context)

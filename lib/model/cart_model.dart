@@ -3,22 +3,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CartModel extends ChangeNotifier {
-  final double _floorFee = 100;
-  final double _floors = 0;
   final List _shopItems = [
     ["20L", "800", "assets/images/big.jpeg", Colors.transparent, "Aqua Max"],
     ["1L", "300", "assets/images/small.jpeg", Colors.transparent, "Aqua Easy"],
   ];
-  final List _cartItems = [];
+  List _cartItems = [];
 
   int big = 0;
   int small = 0;
   get cartItems => _cartItems;
 
   get shopItems => _shopItems;
+
   List<String> options = [
     'Ground Floor/Elevator',
     '1st Floor',
+    '2nd Floor',
     '3rd Floor',
     '4th Floor',
     '5th Floor',
@@ -28,22 +28,57 @@ class CartModel extends ChangeNotifier {
     '9th Floor',
     '10th Floor'
   ];
+  double totalPrice = 0;
   String selectedOption = "Ground Floor/Elevator";
+  String floorProvider() {
+    FirebaseFirestore.instance
+        .collection("user_info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((snapshot) => {
+              selectedOption = snapshot.data()?["floor"] ?? '',
+            });
+    return selectedOption;
+  }
+
+  int _selectedOptionIndex = 0;
+
+  get selectedOptionIndex => _selectedOptionIndex;
+  void updateFloorPrice(String selectedFloor) {
+    print(selectedFloor);
+    _selectedOptionIndex = options.indexOf(selectedFloor);
+    print(_selectedOptionIndex);
+    notifyListeners();
+    totalPrice += (_selectedOptionIndex * 100);
+    notifyListeners();
+    print(totalPrice);
+  }
 
   void updateOption(String option) {
-    selectedOption = option;
-    notifyListeners();
+    // notifyListeners();
+    // // // Find the index of the selected option in the options list
+    // _selectedOptionIndex = options.indexOf(option);
+    // notifyListeners();
+    // // selectedOption = option;
+    // // notifyListeners();
     FirebaseFirestore.instance
         .collection("user_info")
         .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .set(
-            {
-          "floor": option,
-        },
-            SetOptions(
-              merge: true,
-            ));
+      {
+        "floor": option,
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
   }
+
+  // final List _options = context.read<CartModel>().options;
+  // final String selectedFloor = context.read<CartModel>().selectedOption;
+  // _selectedOptionIndex = _options.indexOf(selectedFloor);
+  // final int totalFloorFee = (100 * _selectedOptionIndex);
+  // print(totalFloorFee);
 
   void addItemToCart(int index) {
     if (index == 0) {
@@ -99,11 +134,52 @@ class CartModel extends ChangeNotifier {
   }
 
   String calculateTotal() {
-    double totalPrice = 0;
+    double totalWaterPrice = 0;
 
     for (int i = 0; i < _cartItems.length; i++) {
-      totalPrice += double.parse(_cartItems[i][1]);
+      totalWaterPrice += double.parse(_cartItems[i][1]);
     }
-    return totalPrice.toStringAsFixed(2);
+    double floorTotal = _selectedOptionIndex * 200;
+    print(_selectedOptionIndex);
+    print(floorTotal);
+    return (totalWaterPrice + (_selectedOptionIndex * 100)).toStringAsFixed(0);
+  }
+
+  Future<void> checkout(
+    int big,
+    int small,
+    String floorFee,
+    String total,
+    String note,
+  ) async {
+    FirebaseFirestore.instance
+        .collection("order_info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .set(
+      {
+        "big": big,
+        "small": small,
+        "floorFee": floorFee,
+        "total": total,
+        "note": note,
+        "timeStamp": DateTime.now(),
+      },
+      SetOptions(
+        merge: true,
+      ),
+    );
+  }
+
+  void resetValues() {
+    _cartItems = [];
+    notifyListeners();
+
+    big = 0;
+    notifyListeners();
+
+    small = 0;
+    notifyListeners();
+    selectedOption = '';
+    notifyListeners();
   }
 }

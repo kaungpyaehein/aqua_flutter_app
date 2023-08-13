@@ -24,40 +24,11 @@ class UserProvider extends ChangeNotifier {
       }).toList();
 
       notifyListeners();
+      
     }
   }
 }
 
 // Example usage in a ListView
-class UserListView extends StatelessWidget {
-  final UserProvider userProvider;
 
-  const UserListView({super.key, required this.userProvider});
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: userProvider.users.length,
-      itemBuilder: (context, index) {
-        Map<String, dynamic> userData = userProvider.users[index];
-        return ListTile(
-          title: Text(userData['name']),
-          subtitle: Text(userData['phone']),
-          // Add more widgets here to display other fields like address and floor
-        );
-      },
-    );
-  }
-}
-
-void main() async {
-  UserProvider userProvider = UserProvider();
-  await userProvider.fetchUserData();
-
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(title: const Text('User List')),
-      body: UserListView(userProvider: userProvider),
-    ),
-  ));
-}

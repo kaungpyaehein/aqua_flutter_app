@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:purifed_water_flutter/screens/profile_screen.dart';
+import 'package:purifed_water_flutter/screens/check_out_screen.dart';
 
 import '../model/cart_model.dart';
 import '../widgets/item_tile.dart';
@@ -15,6 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    
+    context.read<CartModel>().floorProvider();
+  }
   @override
   Widget build(BuildContext context) {
     String greetings() {
@@ -34,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
-           
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
@@ -61,32 +66,43 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
-                              FirebaseAuth.instance.currentUser!.email!,
-                              style: GoogleFonts.roboto(
-                                fontSize: 18,
+                            SizedBox(
+                              width: 200,
+                              child: Text(
+                                FirebaseAuth.instance.currentUser!.email!,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ProfileScreen(),
-                                ));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipOval(
-                              child: Image.network(
-                                  FirebaseAuth.instance.currentUser!.photoURL!,
-                                  height: 80,
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (context) => const ProfileScreen(),
+                        //         ));
+                        //   },
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(8.0),
+                        //     child: ClipOval(
+                        //       child: Image.network(
+                        //           FirebaseAuth.instance.currentUser!.photoURL!,
+                        //           height: 70,
+                        //           fit: BoxFit.cover),
+                        //     ),
+                        //   ),
+                        // ),
+                        Text(
+                        "AQUA",
+                        style: GoogleFonts.oswald(
+                            fontSize: 38,
+                            color: Colors.blue.shade800,
+                            fontWeight: FontWeight.bold),
+                      ),
                       ],
                     ),
                     const SizedBox(
@@ -174,27 +190,29 @@ class _HomeScreenState extends State<HomeScreen> {
               //     },
               //   ),
               // ),
+          
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.blue.shade800),
-                  child: Consumer<CartModel>(builder: (context, value, child) {
-                    return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CheckOutScreen(),
+                        ));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.blue.shade800),
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Total cost : ",
-                            style: GoogleFonts.roboto(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          Text(
-                            value.calculateTotal(),
+                            "Confirm",
                             style: GoogleFonts.roboto(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -202,8 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                    );
-                  }),
+                    ),
+                  ),
                 ),
               )
             ],

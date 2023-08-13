@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purifed_water_flutter/model/cart_model.dart';
 import 'package:purifed_water_flutter/model/info_provider.dart';
+import 'package:purifed_water_flutter/model/user_info_provider.dart';
 
 import 'firebase_options.dart';
 import 'screens/auth.dart';
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<CartModel>(create: (_) => CartModel()),
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+        ChangeNotifierProvider<UserInfoProvider>(create: (_) => UserInfoProvider()),
       ],
       child: const MyApp(),
     ),
