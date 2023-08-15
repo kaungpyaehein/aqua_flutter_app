@@ -8,7 +8,8 @@ class UserInfoProvider extends ChangeNotifier {
   String phone = "no phone data ";
   String address = "no address data";
   String floor = "no floor data ";
-
+ String note = "no note data";
+ 
   List<String> infoProvider() {
     FirebaseFirestore.instance
         .collection("user_info")
@@ -21,6 +22,17 @@ class UserInfoProvider extends ChangeNotifier {
               floor = snapshot.data()?["floor"] ?? '',
             });
     return [name, phone, address, floor];
+  }
+  String noteProvider() {
+    FirebaseFirestore.instance
+        .collection("order_info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get()
+        .then((snapshot) => {
+              note = snapshot.data()?["note"] ?? '',
+              
+            });
+    return note ;
   }
 
   Future<void> fetchInfo() async {

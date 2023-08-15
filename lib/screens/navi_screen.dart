@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'chat_screen.dart';
+import 'other_screen.dart';
 import 'home_screen.dart';
 import 'profile_screen.dart';
 
@@ -13,7 +13,7 @@ class NaviPage extends StatefulWidget {
 
 class _NaviPageState extends State<NaviPage> {
   List<Widget> screenList = [
-    const ChatScreen(),
+    const OtherScreen(),
     const HomeScreen(),
     const ProfileScreen()
   ];
@@ -29,7 +29,7 @@ class _NaviPageState extends State<NaviPage> {
             });
           },
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.chat), label: "Chat"),
+            NavigationDestination(icon: Icon(Icons.feed), label: "Others"),
             NavigationDestination(icon: Icon(Icons.home), label: "Home"),
             NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
           ]),

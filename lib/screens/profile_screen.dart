@@ -42,6 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Profile"),
         actions: [
           IconButton(
             onPressed: () {
@@ -216,12 +217,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.all(15.0),
                           child: Row(
                             children: [
-                              Text(
-                                address,
-                                style: GoogleFonts.roboto(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue.shade800,
+                              SizedBox(
+                                width: 300,
+                                child: Text(
+                                  address,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue.shade800,
+                                  ),
                                 ),
                               ),
                             ],

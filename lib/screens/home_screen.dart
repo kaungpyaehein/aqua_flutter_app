@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,9 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    
+
     context.read<CartModel>().floorProvider();
   }
+
   @override
   Widget build(BuildContext context) {
     String greetings() {
@@ -32,6 +36,27 @@ class _HomeScreenState extends State<HomeScreen> {
         return 'Good Afternoon,';
       }
       return 'Good Evening,';
+    }
+
+    Future<void> generateAndStoreOrder() async {
+      // Generate a random order ID (you can customize the range as needed)
+      Random random = Random();
+      int orderID =
+          random.nextInt(900000) + 100000; // Generates a 6-digit random number
+
+      // Store the order ID in Firestore
+      try {
+        await FirebaseFirestore.instance
+            .collection('order_info')
+            .doc(FirebaseAuth.instance.currentUser!.email.toString())
+            .update({
+          'orderID': orderID,
+          // Other order-related data can be added here
+        });
+        print('Order ID $orderID stored successfully.');
+      } catch (error) {
+        print('Error storing order: $error');
+      }
     }
 
     return Scaffold(
@@ -72,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 FirebaseAuth.instance.currentUser!.email!,
                                 style: GoogleFonts.roboto(
                                   fontSize: 18,
-                                  
                                 ),
                               ),
                             ),
@@ -97,12 +121,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         //   ),
                         // ),
                         Text(
-                        "AQUA",
-                        style: GoogleFonts.oswald(
-                            fontSize: 38,
-                            color: Colors.blue.shade800,
-                            fontWeight: FontWeight.bold),
-                      ),
+                          "AQUA",
+                          style: GoogleFonts.oswald(
+                              fontSize: 38,
+                              color: Colors.blue.shade800,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -190,12 +214,15 @@ class _HomeScreenState extends State<HomeScreen> {
               //     },
               //   ),
               // ),
-          
+
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: GestureDetector(
                   onTap: () {
+                    // if(context.read<CartModel>().big != 0  && context.read<CartModel>().big != 0) {
+                    //   generateAndStoreOrder();
+                    // }
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -223,7 +250,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => const OrderDetails(),
+              //           ));
+              //     },
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //           borderRadius: BorderRadius.circular(15),
+              //           color: Colors.blue.shade800),
+              //       child: Padding(
+              //         padding: const EdgeInsets.symmetric(vertical: 20),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             Text(
+              //               "Last Order",
+              //               style: GoogleFonts.roboto(
+              //                   fontSize: 20,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.white),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),

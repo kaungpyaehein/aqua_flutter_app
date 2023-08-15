@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -139,11 +141,21 @@ class CartModel extends ChangeNotifier {
     for (int i = 0; i < _cartItems.length; i++) {
       totalWaterPrice += double.parse(_cartItems[i][1]);
     }
-    double floorTotal = _selectedOptionIndex * 200;
-    print(_selectedOptionIndex);
-    print(floorTotal);
-    return (totalWaterPrice + (_selectedOptionIndex * 100)).toStringAsFixed(0);
+    return ((totalWaterPrice)+(calculateFloorFee())).toStringAsFixed(0);
   }
+  int calculateFloorFee(){
+    int floorFee = 0;
+    floorFee = options.indexOf(floorProvider()) * 100;
+    return floorFee;
+  }
+  int orderID = 0;
+
+ int orderGet (){
+    Random random = Random();
+       orderID =
+          random.nextInt(900000) + 100000;
+          return orderID;
+ }
 
   Future<void> checkout(
     int big,
@@ -151,6 +163,9 @@ class CartModel extends ChangeNotifier {
     String floorFee,
     String total,
     String note,
+    int orderID,
+    String deliveryStatus
+    
   ) async {
     FirebaseFirestore.instance
         .collection("order_info")
@@ -162,6 +177,8 @@ class CartModel extends ChangeNotifier {
         "floorFee": floorFee,
         "total": total,
         "note": note,
+        "orderID": orderID,
+        "deliveryStatus": deliveryStatus,
         "timeStamp": DateTime.now(),
       },
       SetOptions(
