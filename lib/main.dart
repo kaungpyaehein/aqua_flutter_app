@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:purifed_water_flutter/model/cart_model.dart';
-import 'package:purifed_water_flutter/model/info_provider.dart';
 import 'package:purifed_water_flutter/model/user_info_provider.dart';
 
 import 'firebase_options.dart';
@@ -17,8 +16,8 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<CartModel>(create: (_) => CartModel()),
-        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-        ChangeNotifierProvider<UserInfoProvider>(create: (_) => UserInfoProvider()),
+        ChangeNotifierProvider<UserInfoProvider>(
+            create: (_) => UserInfoProvider()),
       ],
       child: const MyApp(),
     ),
@@ -31,8 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       debugShowCheckedModeBanner: false,
       home: const AuthPage(),
     );

@@ -57,6 +57,17 @@ class GroceryItemTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  itemName,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               // item image
               Padding(
@@ -68,13 +79,7 @@ class GroceryItemTile extends StatelessWidget {
               ),
         
               // item name
-              Text(
-                itemName,
-                style: GoogleFonts.roboto(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              
         
               ElevatedButton(
                 onPressed: onPressed,

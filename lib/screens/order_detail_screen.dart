@@ -1,16 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'package:purifed_water_flutter/model/cart_model.dart';
 import 'package:purifed_water_flutter/widgets/details_tile.dart';
 
-import '../screens/register_screen.dart';
+import 'register_screen.dart';
 
 class OrderDetails extends StatefulWidget {
-  const OrderDetails({Key? key}) : super(key: key);
+  final String id;
+  const OrderDetails({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
@@ -25,24 +31,23 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   void initState() {
     super.initState();
-    userSnapshot = FirebaseFirestore.instance
-        .collection("user_info")
-        .doc(FirebaseAuth.instance.currentUser!.email.toString())
-        .get();
+    userSnapshot =
+        FirebaseFirestore.instance.collection("user_info").doc(widget.id).get();
     orderSnapshot = FirebaseFirestore.instance
         .collection("order_info")
-        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .doc(widget.id)
         .get();
-    String noteProvider() {
-      FirebaseFirestore.instance
-          .collection("order_info")
-          .doc(FirebaseAuth.instance.currentUser!.email.toString())
-          .get()
-          .then((snapshot) => {
-                note = snapshot.data()?["note"] ?? '',
-              });
-      return note;
-    }
+
+    // String noteProvider() {
+    //   FirebaseFirestore.instance
+    //       .collection("order_info")
+    //       .doc(FirebaseAuth.instance.currentUser!.email.toString())
+    //       .get()
+    //       .then((snapshot) => {
+    //             note = snapshot.data()?["note"] ?? '',
+    //           });
+    //   return note;
+    // }
   }
 
   @override
@@ -109,17 +114,19 @@ class _OrderDetailsState extends State<OrderDetails> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          trailing: IconButton(
-                            onPressed: () {
-                              FlutterPhoneDirectCaller.callNumber(phone);
-                            },
-                            icon: const Icon(
-                              Icons.call,
-                              size: 30,
+                          trailing: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              onPressed: () {
+                                FlutterPhoneDirectCaller.callNumber(phone);
+                              },
+                              icon: const Icon(
+                                Icons.call,
+                                size: 30,
+                              ),
                             ),
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 8),
@@ -131,44 +138,41 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ),
                         ),
-
                         Container(
+                          width: double.infinity,
                           height: 100,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Row(
+                          child: Column(
                             children: [
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          floor,
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        Text(
-                                          address,
-                                          style: GoogleFonts.roboto(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                      ],
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      floor,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 20,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      address,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.roboto(
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(left: 8, top: 10),
                           child: Text(
@@ -179,8 +183,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ),
                         ),
-
-                        // ... Add your order summary UI here ...
                       ],
                     ),
                   );
@@ -216,7 +218,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     return Consumer<CartModel>(
                         builder: (context, value, child) {
                       if (big == 0 && small == 0) {
-                        Padding(
+                        return Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                           ),
@@ -367,10 +369,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 children: [
                                                   Text(
                                                     note.toString(),
-                                                    // context
-                                                    //     .read<
-                                                    //         UserInfoProvider>()
-                                                    //     .noteProvider(),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 3,
                                                     style: GoogleFonts.roboto(
                                                       fontSize: 20,
                                                     ),
@@ -429,7 +430,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   horizontal: 10, vertical: 6),
                               child: GestureDetector(
                                 onTap: () {
-                                  
                                   Navigator.pop(context);
                                   // Navigator.push(
                                   //     context,
@@ -450,7 +450,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       children: [
                                         Text(
                                           "Done",
-                                          style: GoogleFonts.roboto(
+                                          style: GoogleFonts.openSans(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white),
@@ -464,38 +464,38 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ]),
                         );
                       }
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 6),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.blue.shade800),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Empty cart, order now!",
-                                      style: GoogleFonts.roboto(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                      // return Center(
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 10, vertical: 6),
+                      //     child: GestureDetector(
+                      //       onTap: () {
+                      //         Navigator.pop(context);
+                      //       },
+                      //       child: Container(
+                      //         decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(15),
+                      //             color: Colors.blue.shade800),
+                      //         child: Padding(
+                      //           padding:
+                      //               const EdgeInsets.symmetric(vertical: 20),
+                      //           child: Row(
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               Text(
+                      //                 "Empty cart, order now!",
+                      //                 style: GoogleFonts.roboto(
+                      //                     fontSize: 20,
+                      //                     fontWeight: FontWeight.bold,
+                      //                     color: Colors.white),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // );
                     });
                   }),
             ],

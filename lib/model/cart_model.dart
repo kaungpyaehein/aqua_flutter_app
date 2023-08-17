@@ -141,21 +141,22 @@ class CartModel extends ChangeNotifier {
     for (int i = 0; i < _cartItems.length; i++) {
       totalWaterPrice += double.parse(_cartItems[i][1]);
     }
-    return ((totalWaterPrice)+(calculateFloorFee())).toStringAsFixed(0);
+    return ((totalWaterPrice) + (calculateFloorFee())).toStringAsFixed(0);
   }
-  int calculateFloorFee(){
+
+  int calculateFloorFee() {
     int floorFee = 0;
     floorFee = options.indexOf(floorProvider()) * 100;
     return floorFee;
   }
+
   int orderID = 0;
 
- int orderGet (){
+  int orderGet() {
     Random random = Random();
-       orderID =
-          random.nextInt(900000) + 100000;
-          return orderID;
- }
+    orderID = random.nextInt(900000) + 100000;
+    return orderID;
+  }
 
   Future<void> checkout(
     int big,
@@ -164,13 +165,13 @@ class CartModel extends ChangeNotifier {
     String total,
     String note,
     int orderID,
-    String deliveryStatus
-    
+    String deliveryStatus,
+    String email,
   ) async {
-    FirebaseFirestore.instance
-        .collection("order_info")
-        .doc(FirebaseAuth.instance.currentUser!.email.toString())
-        .set(
+    final docRef = FirebaseFirestore.instance
+        .collection('order_info')
+        .doc(FirebaseAuth.instance.currentUser!.email.toString());
+    docRef.set(
       {
         "big": big,
         "small": small,
@@ -179,7 +180,9 @@ class CartModel extends ChangeNotifier {
         "note": note,
         "orderID": orderID,
         "deliveryStatus": deliveryStatus,
-        "timeStamp": DateTime.now(),
+        "timeStamp": DateTime.now().microsecondsSinceEpoch,
+        "id": FirebaseAuth.instance.currentUser!.email.toString(),
+        "email": email,
       },
       SetOptions(
         merge: true,

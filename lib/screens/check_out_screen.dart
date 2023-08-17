@@ -1,4 +1,4 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -14,52 +14,23 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
- 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-     
   }
+
   final noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         title: const Text("Checkout"),
       ),
       body: Consumer<CartModel>(builder: (context, value, child) {
-        if (value.big == 0 && value.small == 0) {
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.blue.shade800),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Noting in cart, order now!",
-                        style: GoogleFonts.roboto(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
+        if (value.big != 0 || value.small != 0) {
           return SingleChildScrollView(
             child: Column(children: [
               if (value.big != 0)
@@ -100,105 +71,102 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Card(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blue.shade800),
-                      color: Colors.white,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              "assets/images/delivery.png",
-                              height: 70,
-                            ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.blue.shade800),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            "assets/images/delivery.png",
+                            height: 70,
                           ),
-                          Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey.shade200),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    "Floor Fees",
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.blue.shade800,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey.shade200),
+                              child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "for",
+                                  "Floor Fees",
                                   style: GoogleFonts.roboto(
-                                    fontSize: 16,
+                                    color: Colors.blue.shade800,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 120,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegisterScreen(),
-                                        ));
-                                  },
-                                  child: Text(
-                                    softWrap: true,
-                                    textAlign: TextAlign.center,
-                                    value.floorProvider(),
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "for",
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 40,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.blue.shade800),
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    value.floorProvider() ==
-                                            "Ground Floor/Elevator"
-                                        ? "Free"
-                                        : "${(value.options.indexOf(value.floorProvider()) * 100).toString()} Ks",
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.blue.shade800,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            ),
+                            SizedBox(
+                              width: 120,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RegisterScreen(),
+                                      ));
+                                },
+                                child: Text(
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                  value.floorProvider(),
+                                  style: GoogleFonts.roboto(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 40,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blue.shade800),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  value.floorProvider() ==
+                                          "Ground Floor/Elevator"
+                                      ? "Free"
+                                      : "${(value.options.indexOf(value.floorProvider()) * 100).toString()} Ks",
+                                  style: GoogleFonts.roboto(
+                                    color: Colors.blue.shade800,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
@@ -302,6 +270,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         ),
                       );
                     }
+               
+                    final email = FirebaseAuth.instance.currentUser!.email.toString();
                     value.checkout(
                         value.big,
                         value.small,
@@ -310,6 +280,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         noteController.text.trim(),
                         value.orderGet(),
                         "false",
+                        email,
+                        
                         );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -359,37 +331,38 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               )
             ]),
           );
-        }
-        return  Center(
-          child:Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.blue.shade800),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Empty cart, order now!",
-                        style: GoogleFonts.roboto(
+        } else {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 6),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Empty cart, order now!",
+                          style: GoogleFonts.roboto(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        }
       }),
     );
   }

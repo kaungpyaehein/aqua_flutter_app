@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:purifed_water_flutter/widgets/order_detail_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:purifed_water_flutter/model/user_info_provider.dart';
+import 'package:purifed_water_flutter/screens/order_detail_screen.dart';
 
 class LastOrder extends StatefulWidget {
   const LastOrder({super.key});
@@ -57,15 +59,19 @@ class _LastOrderState extends State<LastOrder> {
 
           return InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderDetails(),));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>   OrderDetails(id:  context.read<UserInfoProvider>().email,),
+                  ));
             },
             child: Container(
               decoration: BoxDecoration(
-                  color: deliveryStatus == "false"
-                      ? Colors.blue.shade400
-                      : Colors.green,
-                  borderRadius: BorderRadius.circular(12),
-                  ),
+                color: deliveryStatus == "false"
+                    ? Colors.blue.shade400
+                    : Colors.green,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
@@ -88,13 +94,13 @@ class _LastOrderState extends State<LastOrder> {
                     //         child: Text("No data available"),
                     //       );
                     //     }
-            
+
                     //     final userData =
                     //         snapshot.data!.data() as Map<String, dynamic>;
-            
+
                     //     final address = userData['address'] ?? '';
                     //     final floor = userData['floor'] ?? '';
-            
+
                     //     return SizedBox(
                     //       width: 150,
                     //       child: Column(
@@ -134,12 +140,12 @@ class _LastOrderState extends State<LastOrder> {
                               child: Text("No data available"),
                             );
                           }
-            
+
                           final orderData =
                               snapshot.data!.data() as Map<String, dynamic>;
                           final big = orderData['big'] ?? '';
                           final small = orderData['small'] ?? '';
-            
+
                           final orderID = orderData['orderID'] ?? '';
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +211,6 @@ class _LastOrderState extends State<LastOrder> {
                               )
                             ],
                           );
-                          
                         }),
                   ],
                 ),

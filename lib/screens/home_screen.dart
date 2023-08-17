@@ -1,6 +1,4 @@
-import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-
+    super.initState();
     context.read<CartModel>().floorProvider();
   }
 
@@ -38,26 +36,26 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'Good Evening,';
     }
 
-    Future<void> generateAndStoreOrder() async {
-      // Generate a random order ID (you can customize the range as needed)
-      Random random = Random();
-      int orderID =
-          random.nextInt(900000) + 100000; // Generates a 6-digit random number
-
-      // Store the order ID in Firestore
-      try {
-        await FirebaseFirestore.instance
-            .collection('order_info')
-            .doc(FirebaseAuth.instance.currentUser!.email.toString())
-            .update({
-          'orderID': orderID,
-          // Other order-related data can be added here
-        });
-        print('Order ID $orderID stored successfully.');
-      } catch (error) {
-        print('Error storing order: $error');
-      }
-    }
+    // Future<void> generateAndStoreOrder() async {
+    //   // Generate a random order ID (you can customize the range as needed)
+    //   Random random = Random();
+    //   int orderID =
+    //       random.nextInt(900000) + 100000; // Generates a 6-digit random number
+    //
+    //   // Store the order ID in Firestore
+    //   try {
+    //     await FirebaseFirestore.instance
+    //         .collection('order_info')
+    //         .doc(FirebaseAuth.instance.currentUser!.email.toString())
+    //         .update({
+    //       'orderID': orderID,
+    //       // Other order-related data can be added here
+    //     });
+    //     print('Order ID $orderID stored successfully.');
+    //   } catch (error) {
+    //     print('Error storing order: $error');
+    //   }
+    // }
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
@@ -81,18 +79,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              greetings().toString(),
-                              style: GoogleFonts.roboto(
-                                fontSize: 18,
-                                color: Colors.grey,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                greetings().toString(),
+                                style: GoogleFonts.roboto(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
                             SizedBox(
-                              width: 200,
+                              width: 180,
                               child: Text(
                                 FirebaseAuth.instance.currentUser!.email!,
                                 style: GoogleFonts.roboto(
@@ -102,24 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        // InkWell(
-                        //   onTap: () {
-                        //     Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //           builder: (context) => const ProfileScreen(),
-                        //         ));
-                        //   },
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: ClipOval(
-                        //       child: Image.network(
-                        //           FirebaseAuth.instance.currentUser!.photoURL!,
-                        //           height: 70,
-                        //           fit: BoxFit.cover),
-                        //     ),
-                        //   ),
-                        // ),
                         Text(
                           "AQUA",
                           style: GoogleFonts.oswald(
@@ -129,21 +110,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "It is \norder time!",
-                      style: GoogleFonts.lora(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+
+                    // Text(
+                    //   "It is \norder time!",
+                    //   style: GoogleFonts.lora(
+                    //     fontSize: 35,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
+
               const SizedBox(
-                height: 10,
+                height: 70,
               ),
               Consumer<CartModel>(
                 builder: (context, value, child) {
@@ -187,33 +167,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              // Expanded(
-              //   child: Consumer<CartModel>(
-              //     builder: (context, value, child) {
-              //       return GridView.builder(
-              //         itemCount: value.shopItems.length,
-              //         physics: const NeverScrollableScrollPhysics(),
-              //         gridDelegate:
-              //             const SliverGridDelegateWithFixedCrossAxisCount(
-              //           crossAxisCount: 2,
-              //           childAspectRatio: 2 / 1,
-              //         ),
-              //         itemBuilder: (context, index) {
-              //           return AddRemoveTile(
-              //               itemCount:
-              //                   index == 0 ? value.bigBottle : value.smallBottle,
-              //               itemName: value.shopItems[index][0],
-              //               addItem: () =>
-              //                   Provider.of<CartModel>(context, listen: false)
-              //                       .addItemToCart(index),
-              //               removeItem: () =>
-              //                   Provider.of<CartModel>(context, listen: false)
-              //                       .removeItemFromCart(index));
-              // //         },
-              //       );
-              //     },
-              //   ),
-              // ),
 
               Padding(
                 padding:
@@ -231,17 +184,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(12),
                         color: Colors.blue.shade800),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Confirm",
+                            "Continue",
                             style: GoogleFonts.roboto(
-                                fontSize: 20,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
@@ -251,39 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              //   child: GestureDetector(
-              //     onTap: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => const OrderDetails(),
-              //           ));
-              //     },
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(15),
-              //           color: Colors.blue.shade800),
-              //       child: Padding(
-              //         padding: const EdgeInsets.symmetric(vertical: 20),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             Text(
-              //               "Last Order",
-              //               style: GoogleFonts.roboto(
-              //                   fontSize: 20,
-              //                   fontWeight: FontWeight.bold,
-              //                   color: Colors.white),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // )
+              //
             ],
           ),
         ),
