@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:purifed_water_flutter/screens/check_out_screen.dart';
 
-import '../model/cart_model.dart';
+import '../model/cart_provider.dart';
 import '../widgets/item_tile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<CartModel>().floorProvider();
+    context.read<CartProvider>().floorProvider();
   }
 
   @override
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(
                 height: 70,
               ),
-              Consumer<CartModel>(
+              Consumer<CartProvider>(
                 builder: (context, value, child) {
                   return Row(
                     children: [
@@ -137,13 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: value.shopItems[0][4],
                         count: value.big,
                         addItem: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .addItemToCart(0),
                         removeItem: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .removeAnyItem(0),
                         onPressed: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .addItemToCart(0),
                       ),
                       GroceryItemTile(
@@ -154,13 +154,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: value.shopItems[1][4],
                         count: value.small,
                         addItem: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .addItemToCart(1),
                         removeItem: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .removeAnyItem(1),
                         onPressed: () =>
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .addItemToCart(1),
                       ),
                     ],

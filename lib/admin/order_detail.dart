@@ -1,28 +1,23 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import 'package:purifed_water_flutter/model/cart_provider.dart';
 import 'package:purifed_water_flutter/widgets/details_tile.dart';
 
-import 'register_screen.dart';
+import '../screens/register_screen.dart';
 
-class OrderDetails extends StatefulWidget {
-  final String id;
-  const OrderDetails({
-    Key? key,
-    required this.id,
-  }) : super(key: key);
+class OrderDetailsAdmin extends StatefulWidget {
+  
+  const OrderDetailsAdmin({Key? key}) : super(key: key);
 
   @override
-  State<OrderDetails> createState() => _OrderDetailsState();
+  State<OrderDetailsAdmin> createState() => _OrderDetailsAdminState();
 }
 
-class _OrderDetailsState extends State<OrderDetails> {
+class _OrderDetailsAdminState extends State<OrderDetailsAdmin> {
   late Future<DocumentSnapshot> userSnapshot;
   late Future<DocumentSnapshot> orderSnapshot;
   final noteController = TextEditingController();
@@ -31,13 +26,14 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   void initState() {
     super.initState();
-    userSnapshot =
-        FirebaseFirestore.instance.collection("user_info").doc(widget.id).get();
+    userSnapshot = FirebaseFirestore.instance
+        .collection("user_info")
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
+        .get();
     orderSnapshot = FirebaseFirestore.instance
         .collection("order_info")
-        .doc(widget.id)
+        .doc(FirebaseAuth.instance.currentUser!.email.toString())
         .get();
-
     // String noteProvider() {
     //   FirebaseFirestore.instance
     //       .collection("order_info")
@@ -282,17 +278,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                               title: value.shopItems[0][4],
                               count: "Qty ${big.toString()} ",
                               cost: big * int.parse(value.shopItems[0][1]),
-                              addItem: () => Provider.of<CartProvider>(context,
-                                      listen: false)
-                                  .addItemToCart(0),
-                              removeItem: () => Provider.of<CartProvider>(
-                                      context,
-                                      listen: false)
-                                  .removeAnyItem(0),
-                              onPressed: () => Provider.of<CartProvider>(
-                                      context,
-                                      listen: false)
-                                  .addItemToCart(0),
+                              addItem: () =>
+                                  Provider.of<CartProvider>(context, listen: false)
+                                      .addItemToCart(0),
+                              removeItem: () =>
+                                  Provider.of<CartProvider>(context, listen: false)
+                                      .removeAnyItem(0),
+                              onPressed: () =>
+                                  Provider.of<CartProvider>(context, listen: false)
+                                      .addItemToCart(0),
                             ),
                             if (small != 0)
                               DetailsTile(
@@ -303,16 +297,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 title: value.shopItems[1][4],
                                 count: "Qty ${small.toString()} ",
                                 cost: big * int.parse(value.shopItems[1][1]),
-                                addItem: () => Provider.of<CartProvider>(
-                                        context,
+                                addItem: () => Provider.of<CartProvider>(context,
                                         listen: false)
                                     .addItemToCart(1),
                                 removeItem: () => Provider.of<CartProvider>(
                                         context,
                                         listen: false)
                                     .removeAnyItem(1),
-                                onPressed: () => Provider.of<CartProvider>(
-                                        context,
+                                onPressed: () => Provider.of<CartProvider>(context,
                                         listen: false)
                                     .addItemToCart(1),
                               ),
@@ -373,9 +365,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 children: [
                                                   Text(
                                                     note.toString(),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                     maxLines: 3,
+                                                   
                                                     style: GoogleFonts.roboto(
                                                       fontSize: 20,
                                                     ),

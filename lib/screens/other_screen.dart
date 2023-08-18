@@ -1,8 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:purifed_water_flutter/model/user_info_provider.dart';
 import 'package:purifed_water_flutter/screens/order_detail_screen.dart';
 
 class OtherScreen extends StatelessWidget {
@@ -141,7 +140,7 @@ class OtherScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: 
-                  (context) =>   OrderDetails(id: context.read<UserInfoProvider>().email),));
+                  (context) =>   OrderDetails(id: FirebaseAuth.instance.currentUser!.email.toString()),));
                 },
                 child: Container(
                   decoration: BoxDecoration(

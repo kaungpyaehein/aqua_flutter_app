@@ -68,6 +68,6 @@ class UserInfoProvider extends ChangeNotifier {
               floor = snapshot.data()?["floor"] ?? '',
               note = snapshot.data()?["note"] ?? '',
             });
-            notifyListeners();
+    notifyListeners();
   }
 }

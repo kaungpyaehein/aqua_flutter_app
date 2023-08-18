@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:purifed_water_flutter/admin/more_screen.dart';
+import 'package:purifed_water_flutter/admin/contact_screen.dart';
 
 import 'order_list_screen.dart';
 
@@ -31,7 +31,7 @@ class _AdminScreenState extends State<AdminScreen> {
           },
           destinations: const [
             NavigationDestination(icon: Icon(Icons.list), label: "Orders"),
-            NavigationDestination(icon: Icon(Icons.more_horiz), label: "More"),
+            NavigationDestination(icon: Icon(Icons.perm_contact_cal_sharp), label: "Contacts"),
           ]),
       body: _screenList[_currentPageIndex],
     );

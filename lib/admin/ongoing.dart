@@ -3,8 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:purifed_water_flutter/screens/order_detail_screen.dart';
 
-class OngoingDelivery extends StatelessWidget {
+class OngoingDelivery extends StatefulWidget {
   const OngoingDelivery({super.key});
+
+  @override
+  State<OngoingDelivery> createState() => _OngoingDeliveryState();
+}
+
+class _OngoingDeliveryState extends State<OngoingDelivery> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +35,22 @@ class OngoingDelivery extends StatelessWidget {
               Text("Order ID",
                   style: GoogleFonts.roboto(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   )),
               Text("Max",
                   style: GoogleFonts.roboto(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   )),
               Text("Easy",
                   style: GoogleFonts.roboto(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   )),
               Text("Deli Status",
                   style: GoogleFonts.roboto(
                     fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   )),
             ],
           ),
@@ -46,28 +67,67 @@ class OngoingDelivery extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              if (snapshot.hasData) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text("Error loading orders."),
+                );
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(
+                  child: Text("No orders found."),
+                );
+              }
+              if (snapshot.hasData && mounted) {
                 return Expanded(
-                  child: ListView.builder(
+                  child: ListView.separated(
                     padding: const EdgeInsets.all(10.0),
+                    itemCount: snapshot.data!.docs.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(
+                      color: Colors.black,
+                    ),
                     itemBuilder: (BuildContext context, int index) {
                       QuerySnapshot<Object?>? data = snapshot.data!;
-                      return Column(
-                        children: [
-                          GestureDetector(
-                           onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetails(id: data.docs[index]["id"].toString()),));
-                            } ,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.blue.shade500,
-                                  borderRadius: BorderRadius.circular(12)),
+                      if (index >= 0) {
+                        DocumentSnapshot orderDoc = data.docs[index];
+                        Map<String, dynamic> orderData =
+                            orderDoc.data() as Map<String, dynamic>;
+
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderDetails(
+                                  id: orderDoc.id,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade500,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Dismissible(
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                FirebaseFirestore.instance
+                                    .collection("order_info")
+                                    .doc(orderDoc.id)
+                                    .update(
+                                  {
+                                    "deliveryStatus": "true",
+                                  },
+                                );
+                              },
                               child: ListTile(
                                 contentPadding: const EdgeInsets.all(8),
                                 leading: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      "#${data.docs[index]["orderID"].toString()}"),
+                                    "#${orderData["orderID"].toString()}",
+                                  ),
                                 ),
                                 title: Row(
                                   mainAxisAlignment:
@@ -75,13 +135,12 @@ class OngoingDelivery extends StatelessWidget {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          data.docs[index]["big"].toString()),
+                                      child: Text(orderData["big"].toString()),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          data.docs[index]["small"].toString()),
+                                      child:
+                                          Text(orderData["small"].toString()),
                                     ),
                                   ],
                                 ),
@@ -89,10 +148,10 @@ class OngoingDelivery extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextButton(
                                     style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) =>
-                                                    Colors.blue.shade50)),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.blue.shade50),
+                                    ),
                                     onPressed: () {},
                                     child: const Text(
                                       "Processing",
@@ -103,13 +162,11 @@ class OngoingDelivery extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const Divider(
-                            color: Colors.black,
-                          ),
-                        ],
-                      );
+                        );
+                      } else {
+                        return Container(); // Return an empty container for invalid indices
+                      }
                     },
-                    itemCount: snapshot.data!.docs.length,
                   ),
                 );
               } else {

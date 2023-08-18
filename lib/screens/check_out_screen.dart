@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:purifed_water_flutter/model/cart_model.dart';
+import 'package:purifed_water_flutter/model/cart_provider.dart';
 import 'package:purifed_water_flutter/screens/register_screen.dart';
 import 'package:purifed_water_flutter/widgets/checkout_tile.dart';
 
@@ -29,7 +29,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       appBar: AppBar(
         title: const Text("Checkout"),
       ),
-      body: Consumer<CartModel>(builder: (context, value, child) {
+      body: Consumer<CartProvider>(builder: (context, value, child) {
         if (value.big != 0 || value.small != 0) {
           return SingleChildScrollView(
             child: Column(children: [
@@ -42,13 +42,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   title: value.shopItems[0][4],
                   count: value.big,
                   cost: value.big * num.parse(value.shopItems[0][1]),
-                  addItem: () => Provider.of<CartModel>(context, listen: false)
+                  addItem: () => Provider.of<CartProvider>(context, listen: false)
                       .addItemToCart(0),
                   removeItem: () =>
-                      Provider.of<CartModel>(context, listen: false)
+                      Provider.of<CartProvider>(context, listen: false)
                           .removeAnyItem(0),
                   onPressed: () =>
-                      Provider.of<CartModel>(context, listen: false)
+                      Provider.of<CartProvider>(context, listen: false)
                           .addItemToCart(0),
                 ),
               if (value.small != 0)
@@ -60,13 +60,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   title: value.shopItems[1][4],
                   count: value.small,
                   cost: value.small * num.parse(value.shopItems[1][1]),
-                  addItem: () => Provider.of<CartModel>(context, listen: false)
+                  addItem: () => Provider.of<CartProvider>(context, listen: false)
                       .addItemToCart(1),
                   removeItem: () =>
-                      Provider.of<CartModel>(context, listen: false)
+                      Provider.of<CartProvider>(context, listen: false)
                           .removeAnyItem(1),
                   onPressed: () =>
-                      Provider.of<CartModel>(context, listen: false)
+                      Provider.of<CartProvider>(context, listen: false)
                           .addItemToCart(1),
                 ),
               Padding(
@@ -201,7 +201,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       border: Border.all(color: Colors.blue.shade800),
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.transparent),
-                  child: Consumer<CartModel>(builder: (context, value, child) {
+                  child: Consumer<CartProvider>(builder: (context, value, child) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Row(

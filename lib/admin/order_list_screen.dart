@@ -35,11 +35,13 @@ class _OrderListScreenState extends State<OrderListScreen>
         title: const Text('Order List'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: const <Widget>[
+          tabs:  const <Widget>[
             Tab(
+              text: "Ongoing",
               icon: Icon(Icons.directions_bike_outlined),
             ),
             Tab(
+              text: "Delivered",
               icon: Icon(Icons.done),
             ),
           ],

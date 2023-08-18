@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:purifed_water_flutter/model/cart_model.dart';
+import 'package:purifed_water_flutter/model/cart_provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: const Text("Settings"),
       ),
       body: SingleChildScrollView(
-        child: Consumer<CartModel>(
+        child: Consumer<CartProvider>(
           builder: (context, value, index) {
             return Column(
               children: [
@@ -120,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Consumer<CartModel>(
+                  child: Consumer<CartProvider>(
                     builder: (context, value, child) {
                       return DropdownButtonFormField<String>(
                         value: value.floorProvider().isNotEmpty
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onChanged: (newValue) {
                           setState(() {
                             value.selectedOption = newValue!;
-                            Provider.of<CartModel>(context, listen: false)
+                            Provider.of<CartProvider>(context, listen: false)
                                 .updateOption(newValue);
                           });
                         },

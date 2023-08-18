@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CartModel extends ChangeNotifier {
+class CartProvider extends ChangeNotifier {
   final List _shopItems = [
     ["20L", "800", "assets/images/big.jpeg", Colors.transparent, "Aqua Max"],
     ["1L", "300", "assets/images/small.jpeg", Colors.transparent, "Aqua Easy"],
