@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,7 +61,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              FutureBuilder<DocumentSnapshot>(
+              FutureBuilder(
                 future: userSnapshot,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -101,17 +100,20 @@ class _OrderDetailsState extends State<OrderDetails> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          leading: ClipOval(
-                            child: Image.network(
-                              FirebaseAuth.instance.currentUser!.photoURL
-                                  .toString(),
-                            ),
-                          ),
-                          subtitle: Text(
-                            phone,
-                            style: GoogleFonts.roboto(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          // leading: ClipOval(
+                          //   child: Image.network(
+                          //     FirebaseAuth.instance.currentUser!.photoURL
+                          //         .toString(),
+                          //   ),
+                          // ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              phone,
+                              style: GoogleFonts.roboto(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           trailing: Padding(
@@ -145,32 +147,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      floor,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      address,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  floor,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 20,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  address,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
@@ -215,6 +213,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     final note = orderData['note'] ?? '';
                     final total = orderData['total'] ?? '';
                     final orderID = orderData['orderID'] ?? '';
+                    final orderDate = orderData['timeStamp'] ?? '';
                     return Consumer<CartProvider>(
                         builder: (context, value, child) {
                       if (big == 0 && small == 0) {
@@ -256,19 +255,50 @@ class _OrderDetailsState extends State<OrderDetails> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 14, vertical: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                child: Column(
                                   children: [
-                                    Text(
-                                      "Order ID :   ",
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 20,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Order ID : ",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            orderID.toString(),
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Text(
-                                      orderID.toString(),
-                                      style: GoogleFonts.roboto(
-                                        fontSize: 20,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Date : ",
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                          Text(
+                                            orderDate.toString(),
+                                            style: GoogleFonts.roboto(
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

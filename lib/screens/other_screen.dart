@@ -19,8 +19,11 @@ class OtherScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                "assets/images/water_delivery_3.jpg",
+              Center(
+                child: Image.asset(
+                  "assets/images/water_delivery_3.jpg",
+                  height: 220,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -42,26 +45,25 @@ class OtherScreen extends StatelessWidget {
                     title: Text(
                       "AQUA Team 1",
                       style: GoogleFonts.roboto(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     leading: Container(
                       padding: const EdgeInsets.all(8),
-                      height: 50,
+                      height: 40,
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
                       child: Text(
                         "AQUA",
                         style: GoogleFonts.oswald(
-                            fontSize: 20,
+                            fontSize: 16,
                             color: Colors.blue.shade800,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
                     subtitle: Padding(
-                                         padding: const EdgeInsets.symmetric(vertical: 8),
-                
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
                         "09421128138",
                         style: GoogleFonts.roboto(fontSize: 20),
@@ -92,17 +94,17 @@ class OtherScreen extends StatelessWidget {
                     title: Text(
                       "AQUA Team 2",
                       style: GoogleFonts.roboto(
-                          fontSize: 20, fontWeight: FontWeight.w700),
+                          fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                     leading: Container(
                       padding: const EdgeInsets.all(8),
-                      height: 50,
+                      height: 40,
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
                       child: Text(
                         "AQUA",
                         style: GoogleFonts.oswald(
-                            fontSize: 20,
+                            fontSize: 16,
                             color: Colors.blue.shade800,
                             fontWeight: FontWeight.bold),
                       ),
@@ -126,7 +128,9 @@ class OtherScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: Text(
@@ -139,8 +143,13 @@ class OtherScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: 
-                  (context) =>   OrderDetails(id: FirebaseAuth.instance.currentUser!.email.toString()),));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderDetails(
+                            id: FirebaseAuth.instance.currentUser!.email
+                                .toString()),
+                      ));
                 },
                 child: Container(
                   decoration: BoxDecoration(

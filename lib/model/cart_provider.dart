@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CartProvider extends ChangeNotifier {
   final List _shopItems = [
@@ -157,7 +158,6 @@ class CartProvider extends ChangeNotifier {
     orderID = random.nextInt(900000) + 100000;
     return orderID;
   }
-
   Future<void> checkout(
     int big,
     int small,
@@ -180,7 +180,7 @@ class CartProvider extends ChangeNotifier {
         "note": note,
         "orderID": orderID,
         "deliveryStatus": deliveryStatus,
-        "timeStamp": DateTime.now().microsecondsSinceEpoch,
+        "timeStamp": DateFormat.yMMMEd().format(DateTime.now()),
         "id": FirebaseAuth.instance.currentUser!.email.toString(),
         "email": email,
       },

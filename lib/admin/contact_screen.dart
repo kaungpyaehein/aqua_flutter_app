@@ -31,7 +31,7 @@ class _MoreScreenState extends State<MoreScreen> {
       body: Center(
         child: Column(
           children: [
-          
+          const SizedBox(height: 20,),
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("user_info")
